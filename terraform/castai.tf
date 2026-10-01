@@ -18,6 +18,29 @@ provider "helm" {
   }
 }
 
+resource "castai_autoscaler" "castai_autoscaler_policy" {
+  cluster_id = castai_eks_cluster.castai_cluster.id
+  
+  autoscaler_settings {
+    enabled = true
+    
+    unschedulable_pods {
+      enabled = true
+    }
+    
+    node_downscaler {
+      enabled = true
+      empty_nodes {
+        enabled = true
+      }
+      evictor {
+        enabled = true
+        aggressive_mode = false
+      }
+    }
+  }
+}
+
 resource "castai_eks_cluster" "castai_cluster" {
   account_id = data.aws_caller_identity.current.account_id
   region     = var.aws_region
