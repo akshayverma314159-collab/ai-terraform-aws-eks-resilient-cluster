@@ -1,0 +1,11 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: load-generator-pdb
+spec:
+  # This guarantees the AI will never disrupt nodes if it causes
+  # the application to drop below 2 running replicas.
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: load-generator
